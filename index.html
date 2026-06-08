@@ -1,0 +1,1237 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Portofolio — Qisti Ansa. R</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Lora:ital,wght@0,400;0,500;1,400&family=IBM+Plex+Mono:wght@300;400&display=swap" rel="stylesheet"/>
+  <style>
+    /* ═══════════════════════════════════════════
+       TOKENS
+    ═══════════════════════════════════════════ */
+    :root {
+      --bg:         #f2f0eb;
+      --surface:    #e8e4dc;
+      --border:     #c8c2b6;
+      --olive:      #4a5240;
+      --olive-mid:  #6b7560;
+      --olive-lt:   #9aA48c;
+      --slate:      #3d4554;
+      --slate-lt:   #6b7490;
+      --ink:        #1e1e1e;
+      --ink-soft:   #4a4740;
+      --muted:      #8a8680;
+      --accent:     #c17f3a;      /* warm amber accent — small doses only */
+      --white:      #faf9f6;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'Lora', Georgia, serif;
+      font-weight: 400;
+      line-height: 1.75;
+      overflow-x: hidden;
+      cursor: default;
+    }
+
+    /* grain */
+    body::after {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23g)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 9999;
+    }
+
+    /* ═══════════════════════════════════════════
+       SCROLLBAR
+    ═══════════════════════════════════════════ */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--surface); }
+    ::-webkit-scrollbar-thumb { background: var(--olive-mid); border-radius: 2px; }
+
+    /* ═══════════════════════════════════════════
+       NAV
+    ═══════════════════════════════════════════ */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 3.5rem;
+      height: 58px;
+      background: rgba(242,240,235,0.9);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-id {
+      font-family: 'Lora', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--olive);
+    }
+
+    .nav-links {
+      list-style: none;
+      display: flex; gap: 2.4rem;
+    }
+
+    .nav-links a {
+      font-family: 'Lora', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--ink-soft);
+      transition: color .2s;
+      position: relative;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute; bottom: -3px; left: 0; right: 0;
+      height: 1px; background: var(--accent);
+      transform: scaleX(0); transform-origin: left;
+      transition: transform .3s;
+    }
+
+    .nav-links a:hover { color: var(--olive); }
+    .nav-links a:hover::after { transform: scaleX(1); }
+
+    /* ═══════════════════════════════════════════
+       HERO — editorial split
+    ═══════════════════════════════════════════ */
+    #hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 5fr 4fr;
+      padding-top: 58px;
+    }
+
+    .hero-main {
+      background: var(--white);
+      padding: 7rem 5rem 5rem 5.5rem;
+      display: flex; flex-direction: column; justify-content: center;
+      position: relative; overflow: hidden;
+      border-right: 1px solid var(--border);
+    }
+
+    /* big watermark year */
+    .hero-main::before {
+      content: 'Multiperan';
+      position: absolute;
+      bottom: -0.1em; left: -0.02em;
+      font-family: 'Playfair Display', serif;
+      font-size: 22rem;
+      font-weight: 900;
+      color: rgba(74,82,64,0.045);
+      line-height: 1;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .hero-eyebrow {
+      font-family: 'Lora', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--olive-mid);
+      margin-bottom: 2rem;
+      display: flex; align-items: center; gap: 1rem;
+      opacity: 0; animation: fadeUp .7s .1s ease forwards;
+    }
+
+    .hero-eyebrow span {
+      display: inline-block; width: 2.5rem; height: 1px;
+      background: var(--olive-mid);
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3.2rem, 5.5vw, 6rem);
+      font-weight: 700;
+      line-height: 1.04;
+      color: var(--ink);
+      letter-spacing: -0.02em;
+      opacity: 0; animation: fadeUp .8s .25s ease forwards;
+    }
+
+    h1 em {
+      font-style: italic;
+      font-weight: 400;
+      color: var(--olive);
+    }
+
+    .hero-tagline {
+      margin-top: 2rem;
+      font-size: 1rem;
+      color: var(--muted);
+      max-width: 440px;
+      line-height: 1.85;
+      font-style: italic;
+      opacity: 0; animation: fadeUp .8s .4s ease forwards;
+    }
+
+    .hero-divider {
+      width: 3rem; height: 1px;
+      background: var(--accent);
+      margin: 2.2rem 0;
+      opacity: 0; animation: fadeUp .6s .55s ease forwards;
+    }
+
+    .hero-meta {
+      display: flex; gap: 3rem;
+      opacity: 0; animation: fadeUp .8s .65s ease forwards;
+    }
+
+    .meta-item { display: flex; flex-direction: column; }
+
+    .meta-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.4rem;
+      font-weight: 700;
+      color: var(--olive);
+      line-height: 1;
+    }
+
+    .meta-label {
+      font-family: 'Lora', monospace;
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--muted);
+      margin-top: 0.3rem;
+    }
+
+    /* right panel */
+    .hero-side {
+      background: var(--olive);
+      padding: 6rem 3rem 4rem;
+      display: flex; flex-direction: column; justify-content: center;
+      position: relative; overflow: hidden;
+    }
+
+    .hero-side::before {
+      content: '';
+      position: absolute; top: -80px; right: -80px;
+      width: 320px; height: 320px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .hero-side::after {
+      content: '';
+      position: absolute; bottom: -60px; left: -60px;
+      width: 220px; height: 220px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    /* ── PROFILE PHOTO ── */
+    .profile-photo-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 2.4rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .profile-photo-ring {
+      width: 120px; height: 120px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.2);
+      padding: 4px;
+      position: relative;
+      opacity: 0;
+      animation: fadeUp .7s .15s ease forwards;
+    }
+
+    .profile-photo-ring::before {
+      content: '';
+      position: absolute; inset: -6px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.07);
+    }
+
+    .profile-photo-img {
+      width: 100%; height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      object-position: center top;
+      display: block;
+      background: var(--olive-mid);
+    }
+
+    /* fallback inisial jika foto belum ada */
+    .profile-photo-fallback {
+      width: 100%; height: 100%;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: rgba(255,255,255,0.6);
+      letter-spacing: 0.05em;
+    }
+
+    .profile-name {
+      margin-top: 1rem;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: rgba(255,255,255,0.9);
+      text-align: center;
+      opacity: 0;
+      animation: fadeUp .7s .3s ease forwards;
+    }
+
+    .profile-tagline {
+      font-family: 'Lora', serif;
+      font-size: 0.7rem;
+      color: rgba(255,255,255,0.38);
+      text-align: center;
+      margin-top: 0.2rem;
+      letter-spacing: 0.06em;
+      font-style: italic;
+      opacity: 0;
+      animation: fadeUp .7s .4s ease forwards;
+    }
+
+    .profile-divider {
+      width: 2rem; height: 1px;
+      background: rgba(255,255,255,0.18);
+      margin: 1.4rem auto 0;
+      opacity: 0;
+      animation: fadeUp .5s .5s ease forwards;
+    }
+
+    .side-label {
+      font-family: 'Lora', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.45);
+      margin-bottom: 2rem;
+    }
+
+    .role-stack {
+      display: flex; flex-direction: column; gap: 0;
+      position: relative; z-index: 1;
+    }
+
+    .role-entry {
+      padding: 1.2rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      display: grid;
+      grid-template-columns: 28px 1fr;
+      gap: 1rem;
+      align-items: start;
+      opacity: 0;
+      transform: translateX(-16px);
+      animation: slideIn .6s ease forwards;
+    }
+
+    .role-entry:nth-child(1) { animation-delay: .3s; }
+    .role-entry:nth-child(2) { animation-delay: .45s; }
+    .role-entry:nth-child(3) { animation-delay: .6s; }
+    .role-entry:nth-child(4) { animation-delay: .75s; }
+    .role-entry:nth-child(5) { animation-delay: .9s; }
+
+    .role-entry:first-child { border-top: 1px solid rgba(255,255,255,0.1); }
+
+    .role-glyph {
+      font-size: 1rem;
+      padding-top: 0.15rem;
+      opacity: 0.75;
+    }
+
+    .role-name {
+      font-family: 'Lora', serif;
+      font-size: 0.92rem;
+      font-weight: 500;
+      color: rgba(255,255,255,0.9);
+      line-height: 1.3;
+    }
+
+    .role-since {
+      font-family: 'Lora', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      color: rgba(255,255,255,0.38);
+      margin-top: 0.2rem;
+    }
+
+    /* ═══════════════════════════════════════════
+       SECTION SHELL
+    ═══════════════════════════════════════════ */
+    .s-wrap {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 6.5rem 3.5rem;
+    }
+
+    .s-head { margin-bottom: 4rem; }
+
+    .s-eyebrow {
+      font-family: 'Lora', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--olive-mid);
+      display: flex; align-items: center; gap: 0.8rem;
+      margin-bottom: 1rem;
+    }
+
+    .s-eyebrow::before {
+      content: '';
+      display: inline-block;
+      width: 1.8rem; height: 1px;
+      background: var(--olive-mid);
+    }
+
+    h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 3.6vw, 3rem);
+      font-weight: 700;
+      color: var(--ink);
+      line-height: 1.15;
+      letter-spacing: -0.015em;
+    }
+
+    h2 em { font-style: italic; color: var(--olive); font-weight: 400; }
+
+    /* ═══════════════════════════════════════════
+       ABOUT
+    ═══════════════════════════════════════════ */
+    #about { background: var(--surface); border-top: 1px solid var(--border); }
+
+    .about-layout {
+      display: grid;
+      grid-template-columns: 3fr 2fr;
+      gap: 5rem;
+      align-items: start;
+    }
+
+    .about-body p {
+      font-size: 0.97rem;
+      color: var(--ink-soft);
+      line-height: 1.95;
+      margin-bottom: 1.3rem;
+    }
+
+    .about-body p:last-child { margin-bottom: 0; }
+
+    .about-body strong { color: var(--olive); font-weight: 500; }
+
+    .about-aside {
+      padding: 2rem;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--olive);
+    }
+
+    .aside-title {
+      font-family: 'Lora', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 1.4rem;
+    }
+
+    .aside-list {
+      list-style: none;
+      display: flex; flex-direction: column; gap: 0.85rem;
+    }
+
+    .aside-list li {
+      font-size: 0.84rem;
+      color: var(--ink-soft);
+      display: flex; align-items: baseline; gap: 0.7rem;
+    }
+
+    .aside-list li::before {
+      content: '▸';
+      color: var(--accent);
+      font-size: 0.6rem;
+      flex-shrink: 0;
+    }
+
+    /* ═══════════════════════════════════════════
+       EXPERIENCE — editorial card grid
+    ═══════════════════════════════════════════ */
+    #experience { background: var(--white); border-top: 1px solid var(--border); }
+
+    .exp-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border-top: 1px solid var(--border);
+      border-left: 1px solid var(--border);
+    }
+
+    .exp-card {
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 2.2rem 1.8rem;
+      position: relative;
+      overflow: hidden;
+      transition: background .3s;
+    }
+
+    .exp-card:hover { background: var(--surface); }
+
+    .exp-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--olive);
+      transform: scaleX(0); transform-origin: left;
+      transition: transform .4s ease;
+    }
+
+    .exp-card:hover::before { transform: scaleX(1); }
+
+    .exp-index {
+      font-family: 'Lora', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 1.4rem;
+    }
+
+    .exp-icon { font-size: 1.5rem; margin-bottom: 1rem; }
+
+    .exp-role {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--ink);
+      line-height: 1.25;
+      margin-bottom: 0.4rem;
+    }
+
+    .exp-org {
+      font-family: 'Lora', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--olive-mid);
+      margin-bottom: 1rem;
+    }
+
+    .exp-since {
+      display: inline-block;
+      font-family: 'Lora', monospace;
+      font-size: 0.58rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--white);
+      background: var(--slate);
+      padding: 0.2rem 0.6rem;
+      border-radius: 2px;
+      margin-bottom: 1rem;
+    }
+
+    .exp-desc {
+      font-size: 0.83rem;
+      color: var(--muted);
+      line-height: 1.78;
+    }
+
+    /* ═══════════════════════════════════════════
+       TIMELINE — full-width editorial
+    ═══════════════════════════════════════════ */
+    #journey { background: var(--bg); border-top: 1px solid var(--border); }
+
+    .tl-track {
+      position: relative;
+      padding-left: 0;
+    }
+
+    .tl-row {
+      display: grid;
+      grid-template-columns: 120px 1px 1fr;
+      gap: 0 2.5rem;
+      margin-bottom: 0;
+      align-items: stretch;
+    }
+
+    .tl-year-col {
+      display: flex;
+      align-items: flex-start;
+      justify-content: flex-end;
+      padding-top: 2rem;
+      padding-bottom: 2rem;
+    }
+
+    .tl-year-tag {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--olive);
+    }
+
+    .tl-line-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .tl-dot-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+      padding-top: 2.45rem;
+    }
+
+    .tl-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: var(--olive);
+      border: 2px solid var(--bg);
+      box-shadow: 0 0 0 1px var(--olive);
+      flex-shrink: 0; z-index: 1;
+    }
+
+    .tl-vert {
+      flex: 1;
+      width: 1px;
+      background: var(--border);
+      margin-top: 6px;
+    }
+
+    .tl-row:last-child .tl-vert { background: linear-gradient(to bottom, var(--border), transparent); }
+
+    .tl-content {
+      padding: 1.8rem 0 2.4rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .tl-row:last-child .tl-content { border-bottom: none; }
+
+    .tl-badge {
+      font-family: 'Lora', monospace;
+      font-size: 0.58rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+    }
+
+    .tl-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 0.5rem;
+    }
+
+    .tl-sub {
+      font-size: 0.85rem;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    /* ═══════════════════════════════════════════
+       COMPETENCIES — asymmetric layout
+    ═══════════════════════════════════════════ */
+    #skills { background: var(--surface); border-top: 1px solid var(--border); }
+
+    .skills-layout {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 5rem;
+      align-items: start;
+    }
+
+    .skills-intro-text {
+      font-size: 0.92rem;
+      color: var(--ink-soft);
+      line-height: 1.9;
+      font-style: italic;
+    }
+
+    .skill-groups {
+      display: flex; flex-direction: column; gap: 2.8rem;
+    }
+
+    .skill-group-label {
+      font-family: 'Lora', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--olive-mid);
+      margin-bottom: 1.1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .skill-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.55rem;
+    }
+
+    .skill-tag {
+      font-size: 0.8rem;
+      color: var(--ink-soft);
+      background: var(--white);
+      border: 1px solid var(--border);
+      padding: 0.38rem 0.85rem;
+      border-radius: 2px;
+      line-height: 1.4;
+      transition: border-color .2s, color .2s;
+    }
+
+    .skill-tag:hover {
+      border-color: var(--olive-mid);
+      color: var(--olive);
+    }
+
+    /* ═══════════════════════════════════════════
+       CONTACT
+    ═══════════════════════════════════════════ */
+    #contact {
+      background: var(--slate);
+      border-top: 1px solid #2d3344;
+    }
+
+    #contact .s-eyebrow { color: rgba(255,255,255,0.4); }
+    #contact .s-eyebrow::before { background: rgba(255,255,255,0.3); }
+    #contact h2 { color: var(--white); }
+    #contact h2 em { color: rgba(154,164,140,0.9); }
+
+    .contact-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem; align-items: start;
+    }
+
+    .contact-intro {
+      font-size: 0.95rem;
+      color: rgba(255,255,255,0.55);
+      line-height: 1.9;
+      font-style: italic;
+    }
+
+    .contact-items {
+      display: flex; flex-direction: column; gap: 0;
+    }
+
+    .c-item {
+      display: flex; align-items: center; gap: 1.2rem;
+      padding: 1.2rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      text-decoration: none;
+      color: rgba(255,255,255,0.75);
+      transition: color .25s;
+    }
+
+    .c-item:first-child { border-top: 1px solid rgba(255,255,255,0.08); }
+    .c-item:hover { color: rgba(255,255,255,0.95); }
+
+    .c-icon {
+      width: 38px; height: 38px;
+      border: 1px solid rgba(255,255,255,0.15);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; flex-shrink: 0;
+      transition: border-color .25s;
+    }
+
+    .c-item:hover .c-icon { border-color: rgba(154,164,140,0.5); }
+
+    .c-meta { display: flex; flex-direction: column; }
+
+    .c-type {
+      font-family: 'Lora', monospace;
+      font-size: 0.58rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.3);
+      margin-bottom: 0.15rem;
+    }
+
+    .c-value {
+      font-size: 0.85rem;
+    }
+
+    /* ═══════════════════════════════════════════
+       FOOTER
+    ═══════════════════════════════════════════ */
+    footer {
+      background: var(--ink);
+      padding: 1.5rem 3.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .ft-copy {
+      font-family: 'Lora', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.2);
+    }
+
+    .ft-back {
+      font-family: 'Lora', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.25);
+      text-decoration: none;
+      transition: color .2s;
+    }
+
+    .ft-back:hover { color: rgba(255,255,255,0.55); }
+
+    /* ═══════════════════════════════════════════
+       ANIMATIONS
+    ═══════════════════════════════════════════ */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(-16px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+
+    .reveal {
+      opacity: 0; transform: translateY(22px);
+      transition: opacity .7s ease, transform .7s ease;
+    }
+
+    .reveal.vis { opacity: 1; transform: translateY(0); }
+
+    .reveal-d1 { transition-delay: .1s; }
+    .reveal-d2 { transition-delay: .2s; }
+    .reveal-d3 { transition-delay: .3s; }
+
+    /* ═══════════════════════════════════════════
+       RESPONSIVE
+    ═══════════════════════════════════════════ */
+    @media (max-width: 960px) {
+      nav { padding: 0 1.8rem; }
+      #hero { grid-template-columns: 1fr; }
+      .hero-side { display: none; }
+      .hero-main { padding: 6.5rem 2rem 4rem; }
+      .about-layout, .skills-layout, .contact-layout { grid-template-columns: 1fr; gap: 2.5rem; }
+      .exp-grid { grid-template-columns: 1fr 1fr; }
+      .s-wrap { padding: 4.5rem 1.8rem; }
+    }
+
+    @media (max-width: 620px) {
+      .nav-links { display: none; }
+      .exp-grid { grid-template-columns: 1fr; }
+      .tl-row { grid-template-columns: 70px 1px 1fr; gap: 0 1.2rem; }
+      .tl-year-tag { font-size: 1rem; }
+      footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══ NAV ═════════════════════════════════════ -->
+<nav>
+  <div class="nav-id">Portfolio · Qisti Ansa Ramadhan</div>
+  <ul class="nav-links">
+    <li><a href="#about">Profil</a></li>
+    <li><a href="#experience">Peran</a></li>
+    <li><a href="#journey">Perjalanan</a></li>
+    <li><a href="#skills">Kompetensi</a></li>
+    <li><a href="#contact">Kontak</a></li>
+  </ul>
+</nav>
+
+<!-- ══ HERO ════════════════════════════════════ -->
+<section id="hero">
+  <div class="hero-main">
+    <p class="hero-eyebrow"><span></span>Guru · Operator · Mahasiswa ·</p>
+    <h1>Delapan Tahun<br>Menempa<br><em>Karakter</em></h1>
+    <p class="hero-tagline">
+      Dari lulus SMA hingga mengemban lima peran sekaligus —<br>
+      perjalanan yang membentuk profesional yang adaptif, matang, dan terus bertumbuh.
+    </p>
+    <div class="hero-divider"></div>
+    <div class="hero-meta">
+      <div class="meta-item">
+        <div class="meta-num">8+</div>
+        <div class="meta-label">Tahun Aktif</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-num">5</div>
+        <div class="meta-label">Peran Sekarang</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-num">S1</div>
+        <div class="meta-label">Ilmu Komunikasi</div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-side">
+    <!-- FOTO PROFIL: ganti src di bawah dengan path/URL foto Anda -->
+    <div class="profile-photo-wrap">
+      <div class="profile-photo-ring">
+        <img
+          class="profile-photo-img"
+          src="foto-profil.png"
+          alt="Qisti Ansa R."
+          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+        />
+        <div class="profile-photo-fallback" style="display:none;">QA</div>
+      </div>
+      <div class="profile-name">Qisti Ansa R.</div>
+      <div class="profile-tagline">Guru · Operator · Mahasiswa</div>
+      <div class="profile-divider"></div>
+    </div>
+
+    <p class="side-label">Peran aktif saat ini</p>
+    <div class="role-stack">
+      <div class="role-entry">
+        <div class="role-glyph">🏃</div>
+        <div>
+          <div class="role-name">Guru Pendidikan Jasmani</div>
+          <div class="role-since">Sejak 2021</div>
+        </div>
+      </div>
+      <div class="role-entry">
+        <div class="role-glyph">🖥</div>
+        <div>
+          <div class="role-name">Operator Dapodik Sekolah</div>
+          <div class="role-since">Sejak 2021</div>
+        </div>
+      </div>
+      <div class="role-entry">
+        <div class="role-glyph">📊</div>
+        <div>
+          <div class="role-name">Operator ARKAS - Dana APBN</div>
+          <div class="role-since">Sejak 2021</div>
+        </div>
+      </div>
+      <div class="role-entry">
+        <div class="role-glyph">🎓</div>
+        <div>
+          <div class="role-name">Mahasiswa Ilmu Komunikasi</div>
+          <div class="role-since">Sejak 2024</div>
+        </div>
+      </div>
+      <div class="role-entry">
+        <div class="role-glyph">📚</div>
+        <div>
+          <div class="role-name">Kadiv Akademik — HIMAKOM (Himpunan Mahasiswa Ilmu Komunikasi)</div>
+          <div class="role-since">Mulai di 2026</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ ABOUT ════════════════════════════════════ -->
+<section id="about">
+  <div class="s-wrap">
+    <div class="s-head">
+      <p class="s-eyebrow reveal">Profil Singkat</p>
+      <h2 class="reveal reveal-d1">Satu Orang, <em>Rekam Jejak<br>yang Berbicara</em></h2>
+    </div>
+    <div class="about-layout">
+      <div class="about-body reveal reveal-d1">
+        <p>
+          Saya memulai perjalanan kerja sejak <strong>lulus SMA pada 2016</strong>, menapaki berbagai bidang yang mengasah kemampuan adaptasi, ketekunan, dan kepekaan terhadap kebutuhan lapangan.
+        </p>
+        <p>
+          Pada <strong>awal 2021</strong>, saya memasuki dunia pendidikan dan langsung mengemban tiga tanggung jawab paralel: mendidik siswa melalui pendidikan jasmani, mengelola data sekolah sebagai operator Dapodik, sekaligus memastikan tertibnya pencatatan keuangan negara melalui aplikasi pengelolaan APBN.
+        </p>
+        <p>
+          Tidak puas hanya pada praktik, saya melanjutkan studi ke jenjang S1 <strong>Ilmu Komunikasi pada 2024</strong> — memperkuat fondasi teoritis untuk menjawab tantangan komunikasi di era yang terus berubah. Di kampus, saya langsung aktif berkontribusi sebagai <strong>Kepala Divisi Akademik</strong> dalam himpunan mahasiswa.
+        </p>
+        <p>
+          Saya percaya bahwa keluasan pengalaman adalah aset, bukan beban. Setiap peran membentuk cara pandang yang lebih utuh.
+        </p>
+      </div>
+      <div class="about-aside reveal reveal-d2">
+        <p class="aside-title">Nilai yang Dipegang</p>
+        <ul class="aside-list">
+          <li>Tanggung jawab di setiap peran yang diemban</li>
+          <li>Belajar tanpa henti meski di tengah kesibukan</li>
+          <li>Komunikasi yang jernih dan terstruktur</li>
+          <li>Kepemimpinan berbasis kepercayaan</li>
+          <li>Akuntabilitas dalam pengelolaan data publik</li>
+          <li>Dedikasi pada perkembangan peserta didik</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ EXPERIENCE ═══════════════════════════════ -->
+<section id="experience">
+  <div class="s-wrap">
+    <div class="s-head">
+      <p class="s-eyebrow reveal">Apa yang Saya Kerjakan</p>
+      <h2 class="reveal reveal-d1">Lima Peran, <em>Satu<br>Komitmen</em></h2>
+    </div>
+    <div class="exp-grid">
+
+      <div class="exp-card reveal">
+        <div class="exp-index">01 / Pendidikan</div>
+        <div class="exp-icon">🏃‍♂️</div>
+        <div class="exp-role">Guru Pendidikan Jasmani</div>
+        <div class="exp-org">SMP PGRI 13 Bogor · PJOK</div>
+        <div class="exp-since">Sejak 2021</div>
+        <p class="exp-desc">Membimbing siswa dalam pengembangan kebugaran fisik dan mental. Merancang program pembelajaran olahraga yang terstruktur, menyenangkan, dan berorientasi pada pembentukan karakter.</p>
+      </div>
+
+      <div class="exp-card reveal reveal-d1">
+        <div class="exp-index">02 / Administrasi</div>
+        <div class="exp-icon">🖥️</div>
+        <div class="exp-role">Operator Sekolah</div>
+        <div class="exp-org">Dapodik · Kemendikbudristek</div>
+        <div class="exp-since">Sejak 2021</div>
+        <p class="exp-desc">Mengelola dan memverifikasi data pokok pendidikan (Dapodik) secara akurat. Memastikan kelengkapan data siswa, GTK, dan sarana prasarana sebagai dasar kebijakan pendidikan nasional.</p>
+      </div>
+
+      <div class="exp-card reveal reveal-d2">
+        <div class="exp-index">03 / Keuangan Negara</div>
+        <div class="exp-icon">📊</div>
+        <div class="exp-role">Operator ARKAS</div>
+        <div class="exp-org">Sistem Keuangan Pemerintah</div>
+        <div class="exp-since">Sejak 2021</div>
+        <p class="exp-desc">Memproses dan memonitor realisasi anggaran pendapatan dan belanja negara. Memastikan akuntabilitas dan ketepatan setiap transaksi keuangan sesuai regulasi pemerintah.</p>
+      </div>
+
+      <div class="exp-card reveal">
+        <div class="exp-index">04 / Akademik</div>
+        <div class="exp-icon">🎓</div>
+        <div class="exp-role">Mahasiswa Ilmu Komunikasi</div>
+        <div class="exp-org">Universitas Terbuka · UPBJJ-UT Bogor</div>
+        <div class="exp-since">Masuk pada tahun ajaran 2024</div>
+        <p class="exp-desc">Mendalami teori dan praktik komunikasi massa, media digital, hubungan masyarakat, dan komunikasi organisasi sebagai landasan ilmiah bagi pengembangan karier yang lebih luas.</p>
+      </div>
+
+      <div class="exp-card reveal reveal-d1">
+        <div class="exp-index">05 / Kepemimpinan</div>
+        <div class="exp-icon">📚</div>
+        <div class="exp-role">Kadiv Akademik HIMAKOM</div>
+        <div class="exp-org">Himpunan Mahasiswa ilmu Komunikasi - Bogor</div>
+        <div class="exp-since">Dimulai dari 2026</div>
+        <p class="exp-desc">Merancang dan mengkoordinasi program akademik himpunan. Mendorong budaya keilmuan dan membina rekan mahasiswa dalam pengembangan kompetensi akademik dan profesional.</p>
+      </div>
+
+      <div class="exp-card reveal reveal-d2" style="background:var(--surface); display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center;">
+        <div style="font-family:'Playfair Display',serif; font-size:4rem; color:rgba(74,82,64,0.18); line-height:1; margin-bottom:1rem;">∞</div>
+        <p style="font-family:'IBM Plex Mono',monospace; font-size:0.62rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--muted); line-height:1.8;">Terbuka untuk<br>peran & kolaborasi baru</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══ JOURNEY ══════════════════════════════════ -->
+<section id="journey">
+  <div class="s-wrap">
+    <div class="s-head">
+      <p class="s-eyebrow reveal">Linimasa</p>
+      <h2 class="reveal reveal-d1"><em>Perjalanan</em> yang<br>Membentuk Hari Ini</h2>
+    </div>
+    <div class="tl-track">
+
+      <div class="tl-row reveal">
+        <div class="tl-year-col"><span class="tl-year-tag">2016</span></div>
+        <div class="tl-line-col">
+          <div class="tl-dot-wrap">
+            <div class="tl-dot"></div>
+            <div class="tl-vert"></div>
+          </div>
+        </div>
+        <div class="tl-content">
+          <div class="tl-badge">Awal Perjalanan</div>
+          <div class="tl-title">Memasuki Dunia Kerja</div>
+          <p class="tl-sub">Lulus dari SMA IT Plus Bina Bangsa Sejahtera Bogor dan langsung terjun ke dunia kerja. Mengalami banyak dinamika pekejaan dan menekuni beberapa bidang pekerjaan seperti Hospitality, Logistik dan administrasi. Fase awal yang mengajarkan arti tanggung jawab, disiplin, dan nilai kerja keras di luar bangku sekolah. Membangun fondasi adaptabilitas yang kuat.</p>
+        </div>
+      </div>
+
+      <div class="tl-row reveal">
+        <div class="tl-year-col"><span class="tl-year-tag">2021</span></div>
+        <div class="tl-line-col">
+          <div class="tl-dot-wrap">
+            <div class="tl-dot"></div>
+            <div class="tl-vert"></div>
+          </div>
+        </div>
+        <div class="tl-content">
+          <div class="tl-badge">Dunia Pendidikan</div>
+          <div class="tl-title">Bergabung sebagai pelatih ekstrakurikuler basket dahulu, lalu guru PJOK & Operator</div>
+          <p class="tl-sub">Memasuki dunia pendidikan sebagai guru ekstrakurikuler basket lalu berlanjut menjadi pendidikan jasmani sekaligus mengemban fungsi operator sekolah dan operator aplikasi APBN. Transisi besar yang menuntut penguasaan tiga domain sekaligus dalam waktu bersamaan.</p>
+        </div>
+      </div>
+
+      <div class="tl-row reveal">
+        <div class="tl-year-col"><span class="tl-year-tag">2024</span></div>
+        <div class="tl-line-col">
+          <div class="tl-dot-wrap">
+            <div class="tl-dot"></div>
+            <div class="tl-vert"></div>
+          </div>
+        </div>
+        <div class="tl-content">
+          <div class="tl-badge">Studi & Organisasi</div>
+          <div class="tl-title">S1 Ilmu Komunikasi + Kadiv Akademik HIMAKOM</div>
+          <p class="tl-sub">Melanjutkan studi ke jenjang S1 Ilmu Komunikasi sambil tetap aktif bekerja — sebuah keputusan berani yang mencerminkan komitmen pada pertumbuhan diri. Segera dipercaya mengemban posisi Kepala Divisi Akademik di himpunan mahasiswa.</p>
+        </div>
+      </div>
+
+      <div class="tl-row reveal">
+        <div class="tl-year-col"><span class="tl-year-tag">2026</span></div>
+        <div class="tl-line-col">
+          <div class="tl-dot-wrap">
+            <div class="tl-dot"></div>
+            <div class="tl-vert"></div>
+          </div>
+        </div>
+        <div class="tl-content">
+          <div class="tl-badge">Sekarang</div>
+          <div class="tl-title">Menjalankan Lima Peran Secara Penuh</div>
+          <p class="tl-sub">Lima peran aktif dijalani secara bersamaan: guru, dua fungsi operator, mahasiswa, dan pemimpin organisasi. Titik yang membuktikan bahwa pengalaman delapan tahun telah membentuk kapasitas manajemen diri yang tinggi.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══ SKILLS ════════════════════════════════════ -->
+<section id="skills">
+  <div class="s-wrap">
+    <div class="s-head">
+      <p class="s-eyebrow reveal">Kompetensi</p>
+      <h2 class="reveal reveal-d1">Keahlian yang <em>Terasah<br>dari Lapangan</em></h2>
+    </div>
+    <div class="skills-layout">
+      <div class="skills-intro-text reveal">
+        Setiap kemampuan di bawah ini bukan sekadar pengetahuan — melainkan hasil dari ratusan jam praktik langsung di lapangan, kelas, dan ruang rapat.
+      </div>
+      <div class="skill-groups reveal reveal-d1">
+
+        <div>
+          <div class="skill-group-label">Pendidikan & Coaching</div>
+          <div class="skill-tags">
+            <span class="skill-tag">Pendidikan Jasmani & Olahraga</span>
+            <span class="skill-tag">Pelatihan Ekstrakurikuler Basket</span>
+            <span class="skill-tag">Manajemen Kelas</span>
+            <span class="skill-tag">Perancangan Program Pembelajaran</span>
+            <span class="skill-tag">Pembinaan Karakter Siswa</span>
+          </div>
+        </div>
+
+        <div>
+          <div class="skill-group-label">Administrasi & Keuangan Negara</div>
+          <div class="skill-tags">
+            <span class="skill-tag">Pengelolaan Data Dapodik</span>
+            <span class="skill-tag">Aplikasi Keuangan APBN</span>
+            <span class="skill-tag">Pelaporan Data Pendidikan</span>
+            <span class="skill-tag">Administrasi Sekolah</span>
+            <span class="skill-tag">Verifikasi & Validasi Data</span>
+          </div>
+        </div>
+
+        <div>
+          <div class="skill-group-label">Komunikasi & Kepemimpinan</div>
+          <div class="skill-tags">
+            <span class="skill-tag">Komunikasi Publik</span>
+            <span class="skill-tag">Koordinasi Tim & Organisasi</span>
+            <span class="skill-tag">Perancangan Program Akademik</span>
+            <span class="skill-tag">Manajemen Multi-Peran</span>
+            <span class="skill-tag">Komunikasi Organisasi</span>
+          </div>
+        </div>
+
+        <div>
+          <div class="skill-group-label">Alat & Teknologi</div>
+          <div class="skill-tags">
+            <span class="skill-tag">Microsoft Office</span>
+            <span class="skill-tag">Sistem Informasi Dapodik</span>
+            <span class="skill-tag">Aplikasi SAKTI / SPAN</span>
+            <span class="skill-tag">Google Workspace</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CONTACT ═══════════════════════════════════ -->
+<section id="contact">
+  <div class="s-wrap">
+    <div class="s-head">
+      <p class="s-eyebrow reveal">Mari Terhubung</p>
+      <h2 class="reveal reveal-d1">Mulai sebuah<br><em>Percakapan</em></h2>
+    </div>
+    <div class="contact-layout">
+      <p class="contact-intro reveal">
+        Terbuka untuk diskusi seputar pendidikan, administrasi publik, komunikasi, atau sekadar berbagi pandangan tentang perjalanan multiperan. Hubungi saya melalui kanal di bawah.
+      </p>
+      <div class="contact-items reveal reveal-d1">
+        <a href="mailto:email@anda.com" class="c-item">
+          <div class="c-icon">✉</div>
+          <div class="c-meta">
+            <div class="c-type">Email</div>
+            <div class="c-value">qisti512@admin.smp.belajar.id.com</div>
+          </div>
+        </a>
+        <a href="#" class="c-item">
+          <div class="c-icon">📱</div>
+          <div class="c-meta">
+            <div class="c-type">WhatsApp</div>
+            <div class="c-value">+62 882-9531-2456</div>
+          </div>
+        </a>
+        <a href="#" class="c-item">
+          <div class="c-icon">🔗</div>
+          <div class="c-meta">
+            <div class="c-type">LinkedIn</div>
+            <div class="c-value">www.linkedin.com/in/qansaa</div>
+          </div>
+        </a>
+        <a href="#" class="c-item">
+          <div class="c-icon">📍</div>
+          <div class="c-meta">
+            <div class="c-type">Lokasi</div>
+            <div class="c-value">Kota Bogor, Jawa Barat, Indonesia</div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FOOTER ════════════════════════════════════ -->
+<footer>
+  <span class="ft-copy">© 2026 · Qisti Ansa R.</span>
+  <a href="#hero" class="ft-back">↑ Kembali ke atas</a>
+</footer>
+
+<script>
+  // Scroll reveal
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('vis'); obs.unobserve(e.target); }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
